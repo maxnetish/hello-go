@@ -12,8 +12,23 @@ type OsAndArch struct {
 	Arch  string
 }
 
-func formatAsAndArch(inp *OsAndArch) string {
+type Formattable interface {
+	Format() string
+}
+
+func formatOsAndArch(inp *OsAndArch) string {
 	return inp.Title + " " + inp.Arch
+}
+
+func (self *OsAndArch) Create() *OsAndArch {
+	self.Title = runtime.GOOS
+	self.Arch = runtime.GOARCH
+	return self
+}
+
+func (self *OsAndArch) Format() (result string) {
+	result = formatOsAndArch(self)
+	return
 }
 
 func ReadEnvironmentVariables() (result map[string]string) {
@@ -29,12 +44,12 @@ func ReadEnvironmentVariables() (result map[string]string) {
 }
 
 func AnotherPlatformInfo() (result string) {
-	localInfoPointer := &OsAndArch{
-		Title: runtime.GOOS,
-		Arch:  runtime.GOARCH,
-	}
+	var localInfo OsAndArch
+	var localFormattable Formattable
 
-	result = formatAsAndArch(localInfoPointer)
+	localInfo.Create()
+	localFormattable = &localInfo
+	result = localFormattable.Format()
 	return;
 }
 
