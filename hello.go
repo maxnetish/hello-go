@@ -2,18 +2,14 @@ package main
 
 import (
 	"fmt"
-	"github.com/maxnetish/hello/utils"
 	"log"
-	"math/rand"
 	"os"
 	"time"
+
+	"github.com/maxnetish/hello/utils"
 )
 
-var nanounix = time.Now().UnixNano()
-
 func main() {
-	// init rand
-	rand.Seed(nanounix)
 
 	nowDate := time.Now()
 	uid := os.Getuid()
@@ -35,7 +31,7 @@ func main() {
 	fmt.Printf("Your gid is %v\n", gid)
 
 	for iter := 0; iter < 3; iter++ {
-		if err, rnd := GetNumber(); err == nil {
+		if rnd, err := GetNumber(); err == nil {
 			defer fmt.Printf("Got random number #%v: %v\n", iter, rnd)
 		} else {
 			log.Print(err)
